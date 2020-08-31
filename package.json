@@ -1,0 +1,24 @@
+{
+  "name": "devworkshop",
+  "version": "1.0.0",
+  "description": "> Backend API for DevWorkshop application, which is a bootcamp directory website",
+  "main": "server.js",
+  "scripts": {
+    "start": "set NODE_ENV=production && node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/debeldami/devworkshop.git"
+  },
+  "author": "Debel Damilola",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/debeldami/devworkshop/issues"
+  },
+  "homepage": "https://github.com/debeldami/devworkshop#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  }
+}
