@@ -66,7 +66,7 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 
 /**
  * @description delete a bootcamp
- * @route PUT api/v1/bootcamps/:id
+ * @route DELETE api/v1/bootcamps/:id
  * @access Private
  */
 exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
@@ -80,4 +80,15 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
 
   if (!bootcamp) return res.status(400).json({ success: false });
   res.status(200).json({ success: true, data: {} });
+});
+
+/**
+ * @description Get bootcamps within certain radius
+ * @route GET api/v1/bootcamps/radius/:zipcode/:distance
+ * @access Public
+ */
+exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
+  const { zipcode, distance } = req.params;
+
+  //get longitude and latitude from the geocoder
 });

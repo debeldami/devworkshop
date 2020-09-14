@@ -3,17 +3,21 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors');
 const connectDB = require('./config/db');
-const bootcamp = require('./routes/bootcamp');
 const errorHandler = require('./middlewares/error');
-
-const app = express();
-app.use(express.json());
 
 //loading config variables
 dotenv.config({ path: './config/config.env' });
 
 //connectDB must be called underneath config variables
 connectDB();
+
+//route import
+const bootcamp = require('./routes/bootcamp');
+
+const app = express();
+
+//body parser
+app.use(express.json());
 
 //dev logging middleware
 if (process.env.NODE_ENV === 'development') {
