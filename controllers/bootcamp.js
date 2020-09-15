@@ -1,6 +1,7 @@
 const Bootcamp = require('../models/Bootcamps');
 const ErrorResponse = require('../utils/error');
 const geocoder = require('../utils/geocoder');
+const omit = require('lodash/omit');
 const asyncHandler = require('../middlewares/async');
 
 /**
@@ -9,7 +10,29 @@ const asyncHandler = require('../middlewares/async');
  * @access Public
  */
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.find(req.query);
+  //excluding 'select' from query object using omit function from lodash
+  const reqQuery = omit(req.query, 'select');
+
+  //create query string
+  let queryString = JSON.stringify(reqQuery);
+
+  //create operators e.g $in $gt $lt $gte $lte
+  queryString = queryString.replace(
+    /\b(gt|gte|lt|lte|in)\b/,
+    (match) => `$${match}`
+  );
+
+  //finding resourses
+  let query = Bootcamp.find(JSON.parse(queryString));
+
+  //select fields
+  if (req.query.select) {
+    const fields = req.query.select.split(',').join(' ');
+    query = query.select(fields);
+  }
+
+  const bootcamp = await query;
+
   res
     .status(200)
     .json({ success: true, count: bootcamp.length, data: bootcamp });
