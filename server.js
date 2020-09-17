@@ -13,6 +13,7 @@ connectDB();
 
 //route import
 const bootcamp = require('./routes/bootcamp');
+const courses = require('./routes/courses');
 
 const app = express();
 
@@ -26,6 +27,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use('/api/v1/bootcamps', bootcamp);
+app.use('/api/v1/courses', courses);
+
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
