@@ -5,7 +5,7 @@ const asyncHandler = require('../middlewares/async');
 const Courses = require('../models/Courses');
 
 /**
- * @description Get courses
+ * @description Get courses or Get courses for specific bootcamp
  * @route Get api/v1/courses
  * @route Get api/v1/bootcamps/:bootcampId/courses
  * @access Public
@@ -70,6 +70,29 @@ exports.addCourse = asyncHandler(async (req, res, next) => {
   }
 
   const course = await Course.create(req.body);
+
+  res.status(200).json({
+    success: true,
+    data: course,
+  });
+});
+
+/**
+ * @description update a course
+ * @route PUT api/v1/courses/:id
+ * @access Private
+ */
+exports.updateCourse = asyncHandler(async (req, res, next) => {
+  let course = await Course.findById(req.params.id);
+
+  if (!course) {
+    return next(`no course with the id ${req.params.id}`, 404);
+  }
+
+  course = await Course.findByIdAndUpdate(req.params.id, req.body, {
+    runValidators: true,
+    new: true,
+  });
 
   res.status(200).json({
     success: true,
