@@ -60,7 +60,6 @@ exports.addCourse = asyncHandler(async (req, res, next) => {
   req.body.bootcamp = req.params.bootcampId;
 
   const bootcamp = await Bootcamp.findById(req.params.bootcampId);
-  console.log(bootcamp);
 
   if (!bootcamp) {
     return next(
