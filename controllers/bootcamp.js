@@ -2,7 +2,6 @@ const path = require('path');
 const Bootcamp = require('../models/Bootcamps');
 const ErrorResponse = require('../utils/error');
 const geocoder = require('../utils/geocoder');
-const omit = require('lodash/omit');
 const asyncHandler = require('../middlewares/async');
 
 /**
