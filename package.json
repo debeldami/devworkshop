@@ -18,10 +18,12 @@
   },
   "homepage": "https://github.com/debeldami/devworkshop#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-fileupload": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "mongoose": "^5.10.2",
     "morgan": "^1.10.0",

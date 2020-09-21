@@ -11,74 +11,7 @@ const asyncHandler = require('../middlewares/async');
  * @access Public
  */
 exports.getBootcamps = asyncHandler(async (req, res, next) => {
-  //excluding 'select' from query object using omit function from lodash
-  const reqQuery = omit(req.query, ['select', 'sort', 'page', 'limit']);
-
-  //create query string
-  let queryString = JSON.stringify(reqQuery);
-
-  //create operators e.g $in $gt $lt $gte $lte
-  queryString = queryString.replace(
-    /\b(gt|gte|lt|lte|in)\b/,
-    (match) => `$${match}`
-  );
-
-  //finding resourses
-  let query = Bootcamp.find(JSON.parse(queryString)).populate({
-    path: 'courses',
-    select: 'title description',
-  });
-
-  const total = (await query).length;
-
-  //select fields
-  if (req.query.select) {
-    const fields = req.query.select.split(',').join(' ');
-    query = query.select(fields);
-  }
-
-  //sort fields
-  if (req.query.sort) {
-    const sortBy = req.query.sort.split(',').join(' ');
-    query = query.sort(sortBy);
-  } else {
-    query = query.sort('-createdAt');
-  }
-
-  //pagination
-  const page = parseInt(req.query.page, 10) || 1;
-  const limit = parseInt(req.query.limit, 10) || 20;
-
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-
-  query.skip(startIndex).limit(limit);
-
-  const bootcamp = await query;
-
-  //pagination result
-  const pagination = {};
-
-  if (endIndex < total) {
-    pagination.next = {
-      page: page + 1,
-      limit,
-    };
-  }
-
-  if (startIndex > 0 && total > 0) {
-    pagination.prev = {
-      page: page - 1,
-      limit,
-    };
-  }
-
-  res.status(200).json({
-    success: true,
-    count: bootcamp.length,
-    pagination,
-    data: bootcamp,
-  });
+  res.status(200).json(res.advancedResult);
 });
 
 /**
@@ -87,13 +20,18 @@ exports.getBootcamps = asyncHandler(async (req, res, next) => {
  * @access Public
  */
 exports.getBootcamp = asyncHandler(async (req, res, next) => {
-  const bootcamp = await Bootcamp.findById(req.params.id);
+  let bootcamp = Bootcamp.findById(req.params.id);
 
-  if (!bootcamp) {
+  if (!(await bootcamp)) {
     return next(
       new ErrorResponse(`Bootcamp with the id ${req.params.id} not found`, 404)
     );
   }
+
+  bootcamp = await bootcamp.populate({
+    path: 'courses',
+    select: 'title description',
+  });
 
   res.status(200).json({ success: true, data: bootcamp });
 });
