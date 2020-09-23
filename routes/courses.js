@@ -12,6 +12,9 @@ const advancedResult = require('../middlewares/advancedResult');
 
 const router = express.Router({ mergeParams: true });
 
+//importing the procted middleware
+const { protect, authorize } = require('../middlewares/auth');
+
 router
   .route('/')
   .get(
@@ -21,7 +24,11 @@ router
     }),
     getCourses
   )
-  .post(addCourse);
-router.route('/:id').get(getCourse).put(updateCourse).delete(deleteCourse);
+  .post(protect, authorize('admin', 'publisher'), addCourse);
+router
+  .route('/:id')
+  .get(getCourse)
+  .put(protect, authorize('admin', 'publisher'), updateCourse)
+  .delete(protect, authorize('admin', 'publisher'), deleteCourse);
 
 module.exports = router;
