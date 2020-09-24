@@ -17,7 +17,7 @@ const courseRouter = require('./courses');
 
 const router = express.Router();
 
-//importing the procted middleware
+//importing the proct & authorize middleware
 const { protect, authorize } = require('../middlewares/auth');
 
 //Re-route into other resource router
