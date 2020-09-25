@@ -94,10 +94,10 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
   const bootcamp = await Bootcamp.findById(req.params.id);
 
   if (!bootcamp) {
-    return next(
-      new ErrorResponse(`Bootcamp with the id ${req.params.id} not found`, 404)
-    );
+    return next(new ErrorResponse(`Bootcamp with the id not found`, 404));
   }
+
+  console.log(req.user.role);
 
   //make sure user is owner of bootcamp
   if (bootcamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
