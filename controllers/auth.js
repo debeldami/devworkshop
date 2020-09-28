@@ -2,6 +2,7 @@ const User = require('../models/user');
 const ErrorResponse = require('../utils/error');
 const asyncHandler = require('../middlewares/async');
 const sendEmail = require('../utils/sendEmail');
+const crypto = require('crypto');
 
 /**
  * @description Register a user
@@ -71,6 +72,60 @@ exports.getMe = asyncHandler(async (req, res, next) => {
 });
 
 /**
+ * @description Update user details
+ * @route PUT api/v1/auth/updatedetails
+ * @access Private
+ */
+exports.updateDetails = asyncHandler(async (req, res, next) => {
+  let fieldsToUpdate = {};
+
+  if (req.body.name) {
+    fieldsToUpdate.name = req.body.name;
+  }
+  if (req.body.email) {
+    fieldsToUpdate.email = req.body.email;
+  }
+
+  const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+});
+
+/**
+ * @description Update user password
+ * @route PUT api/v1/auth/updatepassword
+ * @access Private
+ */
+exports.updatePassword = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user.id).select('+password');
+
+  console.log('1');
+
+  const isPasswordMatched = await user.matchPassword(req.body.currentPassword);
+
+  console.log(isPasswordMatched);
+
+  if (!isPasswordMatched) {
+    return next(new ErrorResponse('password is incorrect', 401));
+  }
+
+  console.log('2');
+
+  user.password = req.body.newPassword;
+
+  console.log('3');
+  await user.save();
+
+  sendTokenResponse(user, 200, res);
+});
+
+/**
  * @description Forget password
  * @route POST api/v1/auth/forgetpassword
  * @access Public
@@ -113,6 +168,43 @@ exports.forgetPassword = asyncHandler(async (req, res, next) => {
 
     return next(new ErrorResponse('Email could not be sent', 500));
   }
+});
+
+/**
+ * @description Reset password
+ * @route PUT api/v1/auth/forgetpassword/:resettoken
+ * @access Public
+ */
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+  const resetToken = req.params.resetToken;
+
+  //get hashed token
+  const resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex');
+
+  const user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordExp: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return next(new ErrorResponse('invalid token', 404));
+  }
+
+  if (req.body.password === undefined || req.body.password.length < 4) {
+    return next(new ErrorResponse('password must exceed 5 characters', 404));
+  }
+
+  //set new password, password will still be encrypted due to pre save moongoose middle ware in User model
+  user.password = req.body.password;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpire = undefined;
+
+  await user.save();
+
+  sendTokenResponse(user, 200, res);
 });
 
 //get token, create cookies and send response
