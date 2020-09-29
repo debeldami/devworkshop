@@ -1,7 +1,7 @@
 const omit = require('lodash/omit');
 
 const advancedResult = (model, populate) => async (req, res, next) => {
-  //excluding 'select' from query object using omit function from lodash
+  //excluding 'select', 'sort', 'page', 'limit'from query object using omit function from lodash
   const reqQuery = omit(req.query, ['select', 'sort', 'page', 'limit']);
 
   //create query string

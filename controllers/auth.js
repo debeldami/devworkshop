@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const User = require('../models/users');
 const ErrorResponse = require('../utils/error');
 const asyncHandler = require('../middlewares/async');
 const sendEmail = require('../utils/sendEmail');
