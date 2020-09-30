@@ -12,16 +12,22 @@ const {
 const Bootcamp = require('../models/Bootcamps');
 const advancedResult = require('../middlewares/advancedResult');
 
-//include other resource routers
+//include course resource routers
 const courseRouter = require('./courses');
+
+//include review resource routers
+const reviewRouter = require('./reviews');
 
 const router = express.Router();
 
 //importing the proct & authorize middleware
 const { protect, authorize } = require('../middlewares/auth');
 
-//Re-route into other resource router
+//Re-route into other course router
 router.use('/:bootcampId/courses', courseRouter);
+
+//Re-route into other review router
+router.use('/:bootcampId/reviews', reviewRouter);
 
 router
   .route('/')
