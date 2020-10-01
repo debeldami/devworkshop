@@ -5,6 +5,7 @@ const colors = require('colors');
 const path = require('path');
 const fileupload = require('express-fileupload');
 const cookiesParser = require('cookie-parser');
+const mongoSanitize = require('express-mongo-sanitize');
 const connectDB = require('./config/db');
 const errorHandler = require('./middlewares/error');
 
@@ -34,6 +35,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //body parser
 app.use(express.json());
+
+//mongo sanitizer
+app.use(mongoSanitize());
 
 //dev logging middleware
 if (process.env.NODE_ENV === 'development') {
