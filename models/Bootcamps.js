@@ -7,7 +7,7 @@ const BootcampSchema = mongoose.Schema(
     name: {
       type: String,
       minlength: [5, 'Bootcamp name cannot be less than 5 characters'],
-      // maxlength: [20, 'Bootcamp name cannot be more than 20 characters'],
+      maxlength: [50, 'Bootcamp name cannot be more than 20 characters'],
       required: [true, 'Please add a bootcamp name'],
       unique: [true, 'Bootcamp name already exist'],
       trim: true,
