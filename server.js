@@ -8,6 +8,9 @@ const cookiesParser = require('cookie-parser');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
 const xss = require('xss-clean');
+const hpp = require('hpp');
+const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 const connectDB = require('./config/db');
 const errorHandler = require('./middlewares/error');
 
@@ -46,6 +49,38 @@ app.use(helmet());
 
 //prevent xss attacts
 app.use(xss());
+
+//rate limiting
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, //10 mins
+  max: 100,
+  message: {
+    success: false,
+    message: 'maximum request per ten minutes exceeded',
+  },
+});
+
+//reset password rate limit
+const passwordResetLimiter = rateLimit({
+  windowMs: 24 * 60 * 60 * 1000, //10 mins
+  max: 5,
+  message: {
+    success: false,
+    message: 'maximum request per day exceeded',
+  },
+});
+
+//password reset limiter
+app.use('/api/v1/auth/forgetpassword', passwordResetLimiter);
+
+//general limiter
+app.use(limiter);
+
+//prevent http param pollution
+app.use(hpp());
+
+//enable cors
+app.use(cors());
 
 //dev logging middleware
 if (process.env.NODE_ENV === 'development') {
