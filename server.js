@@ -6,6 +6,8 @@ const path = require('path');
 const fileupload = require('express-fileupload');
 const cookiesParser = require('cookie-parser');
 const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
+const xss = require('xss-clean');
 const connectDB = require('./config/db');
 const errorHandler = require('./middlewares/error');
 
@@ -38,6 +40,12 @@ app.use(express.json());
 
 //mongo sanitizer
 app.use(mongoSanitize());
+
+//helmet: set security headers
+app.use(helmet());
+
+//prevent xss attacts
+app.use(xss());
 
 //dev logging middleware
 if (process.env.NODE_ENV === 'development') {
