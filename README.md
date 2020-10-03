@@ -144,6 +144,10 @@ node seeder -i
 - Use docgen to create HTML files from Postman
 - Add html files as the / route for the api
 
+## Demo
+
+Extensive documentation with examples [here](https://documenter.getpostman.com/view/10514429/TVReeBHK)
+
 - Version: 1.0.0
 - License: MIT
 - Author: Debel Damilola
