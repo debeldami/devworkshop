@@ -4,8 +4,11 @@
   "description": "> Backend API for DevWorkshop application, which is a bootcamp directory website",
   "main": "server.js",
   "scripts": {
-    "start": "set NODE_ENV=production && node server.js",
+    "start": "node server.js",
     "dev": "nodemon server.js"
+  },
+  "engines": {
+    "node": "12.x"
   },
   "repository": {
     "type": "git",
