@@ -146,7 +146,7 @@ node seeder -i
 
 ## Demo
 
-Extensive documentation with examples [here](https://documenter.getpostman.com/view/10514429/TVReeBHK?version=latest)
+Extensive documentation with examples [here](https://documenter.getpostman.com/view/10514429/TVReeBHK)
 
 - Version: 1.0.0
 - License: MIT
