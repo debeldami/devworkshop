@@ -9,8 +9,8 @@ Edit the config file name in config folder from (config/configs.env) to (config/
 - DB : connection string for MongoDB Compass
 - GEOCODER_API_KEY : Mapquest api ley
 - JWT_SECRET : secret key for jwt
-- JWT_EXPIRES: number of days it should take for jwt token to exoire (e.g 10d, 20d, 30d)
-- JWT_COOKIES_EXPIRES : number of days it should take for jwt cookie to exoire (e.g 10, 20, 30)
+- JWT_EXPIRES: number of days for jwt token to expire (e.g 10d, 20d, 30d)
+- JWT_COOKIES_EXPIRES : number of days for jwt cookie to expire (e.g 10, 20, 30)
 - SMTP_EMAIL : smtp email which will be provided for while setting up mailtrap
 - SMTP_PASSWORD : smtp password which will be provided for while setting up mailtrap
 
